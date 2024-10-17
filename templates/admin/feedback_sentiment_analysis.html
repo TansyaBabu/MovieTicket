@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback Sentiment Analysis</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        header {
+            background-color: salmon;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #007bff;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            text-decoration: none;
+            color: white;
+            background-color: #007bff;
+            font-weight: bold;
+            text-align: center;
+            font-size: 16px;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .feedback-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .feedback-list li {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .feedback-list li p {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Feedback Sentiment Analysis</h1>
+    </header>
+
+    <div class="container">
+        <h2>Sentiment Analysis Results</h2>
+        <p>This page provides an overview of sentiment analysis for user feedback.</p>
+        
+        <!-- Example of displaying sentiment analysis results -->
+        <ul class="feedback-list">
+            <li>
+                <p><strong>Feedback:</strong> Great product, I loved it!</p>
+                <p><strong>Sentiment:</strong> Positive</p>
+            </li>
+            <li>
+                <p><strong>Feedback:</strong> Worst purchase ever, totally disappointed.</p>
+                <p><strong>Sentiment:</strong> Negative</p>
+            </li>
+            <!-- Add more feedback items here -->
+        </ul>
+
+        <a href="{% url 'admin_dashboard' %}" class="btn">Back to Admin Dashboard</a>
+    </div>
+</body>
+</html>

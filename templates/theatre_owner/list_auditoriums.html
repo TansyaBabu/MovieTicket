@@ -1,0 +1,85 @@
+<!-- templates/theatre_owner/list_auditoriums.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Auditoriums for {{ theatre.name }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: left;
+        }
+        th {
+            background-color: #4a148c; /* Dark purple background */
+            color: white;
+        }
+        /* Navbar styles */
+        .navbar {
+            background-color: #4a148c; /* Dark purple background */
+            padding: 10px;
+            color: white;
+            text-align: center;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            margin: 0 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .navbar a:hover {
+            background-color: #6b46c1; /* Lighter purple on hover */
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <a href="{% url 'list_auditoriums' %}">Auditoriums</a>
+        <a href="{% url 'add_auditorium' %}">Add Auditorium</a>
+        <!-- Add more links as needed -->
+    </div>
+
+    <h1>Auditoriums for {{ theatre.name }}</h1>
+    
+    {% if auditoriums %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Auditorium Name</th>
+                    <th>Theatre Name</th>
+                    <th>Capacity</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for auditorium in auditoriums %}
+                <tr>
+                    <td>{{ auditorium.name }}</td>
+                    <td>{{ auditorium.theatre.name }}</td>
+                    <td>{{ auditorium.capacity }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No auditoriums found for this theatre.</p>
+    {% endif %}
+    
+    <a href="{% url 'add_auditorium' %}">Add Auditorium</a>
+</body>
+</html>

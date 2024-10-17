@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Theatre</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f4f8;
+            color: #2d3748;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 40px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #4a5568;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 2.5rem;
+        }
+        form {
+            display: grid;
+            gap: 20px;
+        }
+        label {
+            font-weight: 500;
+            color: #4a5568;
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+        input[type="text"]:focus, input[type="number"]:focus {
+            outline: none;
+            border-color: #4299e1;
+        }
+        input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        button[type="submit"] {
+            background-color: #4299e1;
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button[type="submit"]:hover {
+            background-color: #3182ce;
+        }
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Edit Theatre</h1>
+        <form method="post">
+            {% csrf_token %}
+            <div>
+                <label for="name">Theatre Name</label>
+                <input type="text" id="name" name="name" value="{{ theatre.name }}" required>
+            </div>
+            <div>
+                <label for="location">Location</label>
+                <input type="text" id="location" name="location" value="{{ theatre.location }}" required>
+            </div>
+            <div>
+                <label for="rows">Rows (comma-separated)</label>
+                <input type="text" id="rows" name="rows" value="{{ theatre.rows }}" required>
+            </div>
+            <div>
+                <label for="seats_per_row">Seats Per Row</label>
+                <input type="number" id="seats_per_row" name="seats_per_row" value="{{ theatre.seats_per_row }}" required>
+            </div>
+            <div class="checkbox-group">
+                <input type="checkbox" id="parking_available" name="parking_available" {% if theatre.parking_available %}checked{% endif %}>
+                <label for="parking_available">Parking Available</label>
+            </div>
+            <div>
+                <label for="food_and_beverage_options">Food and Beverage Options</label>
+                <input type="text" id="food_and_beverage_options" name="food_and_beverage_options" value="{{ theatre.food_and_beverage_options }}">
+            </div>
+            <div>
+                <label for="accessibility_options">Accessibility Options</label>
+                <input type="text" id="accessibility_options" name="accessibility_options" value="{{ theatre.accessibility_options }}">
+            </div>
+            <button type="submit">Update Theatre</button>
+        </form>
+    </div>
+</body>
+</html>

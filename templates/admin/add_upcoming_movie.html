@@ -1,0 +1,143 @@
+<!-- templates/admin/add_upcoming_movie.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Upcoming Movie - Admin Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f3f4f6;
+            color: #1f2937;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        h1 {
+            color: #4a148c;
+            margin-bottom: 20px;
+        }
+        form {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #4a148c;
+            font-weight: 500;
+        }
+        input[type="text"], input[type="date"], input[type="file"], input[type="time"], input[type="number"], select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #6b46c1;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        button:hover {
+            background-color: #4a148c;
+        }
+    </style>
+</head>
+<body>
+    <h1>Add Upcoming Movie</h1>
+    <form method="POST" action="{% url 'add_upcoming_movie' %}" enctype="multipart/form-data" onsubmit="return validateForm(event)">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="title">Movie Title:</label>
+            <input type="text" id="title" name="title" required>
+        </div>
+        <div class="form-group">
+            <label for="category">Category:</label>
+            <select id="category" name="category" required>
+                {% for category in categories %}
+                <option value="{{ category.id }}">{{ category.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="release_date">Release Date:</label>
+            <input type="date" id="release_date" name="release_date" required>
+        </div>
+        <div class="form-group">
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="poster">Poster:</label>
+            <input type="file" id="poster" name="poster" accept=".jpg,.jpeg,.png" required>
+        </div>
+        <div class="form-group">
+            <label for="director">Director:</label>
+            <input type="text" id="director" name="director" required>
+        </div>
+        <div class="form-group">
+            <label for="duration">Duration:</label>
+            <input type="time" id="duration" name="duration" required>
+        </div>
+        <div class="form-group">
+            <label for="price">Price:</label>
+            <input type="number" id="price" name="price" step="0.01" required>
+        </div>
+        <button type="submit">Add Movie</button>
+    </form>
+
+    <script>
+        function validateForm(event) {
+            // Add your validation logic here
+            const title = document.getElementById('title').value;
+            const director = document.getElementById('director').value;
+            const price = document.getElementById('price').value;
+
+            // Example validation: Check if title and director contain only letters and spaces
+            const titleRegex = /^[A-Za-z\s]+$/;
+            const directorRegex = /^[A-Za-z\s]+$/;
+
+            if (!titleRegex.test(title)) {
+                alert("Title must contain only alphabets and spaces.");
+                event.preventDefault();
+                return false;
+            }
+
+            if (!directorRegex.test(director)) {
+                alert("Director must contain only alphabets and spaces.");
+                event.preventDefault();
+                return false;
+            }
+
+            // Example validation: Check if price is a positive number
+            if (parseFloat(price) <= 0) {
+                alert("Price must be a positive number.");
+                event.preventDefault();
+                return false;
+            }
+
+            return true; // Allow form submission if all validations pass
+        }
+    </script>
+</body>
+</html>

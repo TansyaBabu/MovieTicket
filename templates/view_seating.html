@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Seating for {{ theatre.name }}</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif; /* Changed to Poppins for consistency */
+            margin: 0;
+            padding: 20px;
+            background: #f4f4f4; /* Light background color */
+        }
+        header {
+            background-color: #4a148c; /* Dark purple background */
+            padding: 15px 0;
+            color: white;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        .navbar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .navbar a:hover {
+            background-color: #6b46c1; /* Lighter purple on hover */
+        }
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            margin-top: 80px; /* Space for fixed header */
+        }
+        .screen {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            font-size: 18px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+        .seating-wrapper {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+        .row-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        .seating-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(30px, 1fr));
+            gap: 5px;
+            justify-content: center;
+        }
+        .seat {
+            width: 30px;
+            height: 30px;
+            border-radius: 5px;
+            color: white;
+            text-align: center;
+            line-height: 30px;
+            cursor: pointer;
+            user-select: none;
+        }
+        .seat.available {
+            background-color: #3498db; /* Blue for available seats */
+        }
+        .seat.selected {
+            background-color: #2ecc71; /* Green for selected seats */
+        }
+        .seat.sold {
+            background-color: #e74c3c; /* Red for sold seats */
+            cursor: not-allowed;
+        }
+        .legend {
+            margin-bottom: 30px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+        .legend-color.available {
+            background-color: #3498db;
+        }
+        .legend-color.selected {
+            background-color: #2ecc71;
+        }
+        .legend-color.sold {
+            background-color: #e74c3c;
+        }
+        .booking-summary {
+            margin: 20px 0;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .booking-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #27ae60; /* Green for booking button */
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .booking-btn:disabled {
+            background-color: #95a5a6; /* Gray for disabled button */
+            cursor: not-allowed;
+        }
+        .row-label {
+            position: relative;
+        }
+        .row-number {
+            position: absolute;
+            left: -40px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .section-label {
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        .large-gap {
+            margin-bottom: 50px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="navbar">
+            <a href="{% url 'user_dashboard' %}">Home</a>
+            <a href="#">Movies</a>
+            <a href="{% url 'contact' %}">Contact</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1>Seating Arrangement for {{ theatre.name }}</h1>
+
+        <div class="screen">Screen This Way</div>
+
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color available"></div>
+                <span>Available Seat</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color selected"></div>
+                <span>Selected Seat</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color sold"></div>
+                <span>Sold Seat</span>
+            </div>
+        </div>
+
+        <form id="bookingForm" action="{% url 'confirm_booking' %}" method="POST">
+            {% csrf_token %}
+
+            <!-- Gold Seating Arrangement -->
+            <div class="section-label">Gold Seats (Rs.150)</div>
+            {% for row, seats in seating_arrangement.items %}
+                {% if row in "ABCDEF" %}
+                    <div class="seating-wrapper {% if row == 'F' %}large-gap{% endif %}">
+                        <div class="row-label">
+                            <span class="row-number">{{ row }}</span>
+                            Row
+                        </div>
+                        <div class="seating-grid">
+                            {% for seat in seats %}
+                                <div 
+                                    class="seat available {% if seat.status == 'sold' %}sold{% elif seat.status == 'selected' %}selected{% endif %}" 
+                                    data-row="{{ row }}" 
+                                    data-number="{{ seat.number }}" 
+                                    data-type="gold"
+                                    onclick="selectSeat(this)"
+                                >
+                                    {{ seat.number }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+
+            <!-- Platinum Seating Arrangement -->
+            <div class="section-label">Platinum Seats (Rs.200)</div>
+            {% for row, seats in seating_arrangement.items %}
+                {% if row in "GHIJKLMNOP" %}
+                    <div class="seating-wrapper {% if row == 'L1' %}large-gap{% endif %}">
+                        <div class="row-label">
+                            <span class="row-number">{{ row }}</span>
+                            Row
+                        </div>
+                        <div class="seating-grid">
+                            {% for seat in seats %}
+                                <div 
+                                    class="seat available {% if seat.status == 'sold' %}sold{% elif seat.status == 'selected' %}selected{% endif %}" 
+                                    data-row="{{ row }}" 
+                                    data-number="{{ seat.number }}" 
+                                    data-type="platinum"
+                                    onclick="selectSeat(this)"
+                                >
+                                    {{ seat.number }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+
+            <input type="hidden" id="selectedSeats" name="selectedSeats" value="">
+            <input type="hidden" id="totalAmount" name="totalAmount" value="">
+
+            <div class="booking-summary" id="bookingSummary">
+                Total Amount: Rs.0
+                <br>
+                Selected Seats: None
+            </div>
+
+            <button id="confirmBooking" class="booking-btn" type="submit" disabled>Confirm Booking</button>
+        </form>
+    </div>
+
+    <script>
+        const SEAT_PRICES = {
+            gold: 150,
+            platinum: 200
+        };
+
+        let selectedSeats = [];
+
+        function selectSeat(seatElement) {
+            const row = seatElement.getAttribute('data-row');
+            const number = seatElement.getAttribute('data-number');
+            const type = seatElement.getAttribute('data-type');
+            const seatId = `${row}-${number}`;
+
+            if (seatElement.classList.contains('sold')) {
+                alert('This seat is already sold.');
+                return;
+            }
+
+            seatElement.classList.toggle('selected');
+
+            if (seatElement.classList.contains('selected')) {
+                selectedSeats.push({ id: seatId, type: type });
+            } else {
+                selectedSeats = selectedSeats.filter(seat => seat.id !== seatId);
+            }
+
+            updateFormFields();
+            updateBookingSummary();
+        }
+
+        function updateFormFields() {
+            // Update hidden input with selected seats
+            document.getElementById('selectedSeats').value = selectedSeats.map(seat => seat.id).join(',');
+
+            // Update hidden input with total amount
+            document.getElementById('totalAmount').value = calculateTotalAmount();
+
+            // Enable or disable the booking button based on seat selection
+            document.getElementById('confirmBooking').disabled = selectedSeats.length === 0;
+        }
+
+        function updateBookingSummary() {
+            const totalAmount = calculateTotalAmount();
+            const seatsText = selectedSeats.length > 0 ? selectedSeats.map(seat => seat.id).join(', ') : 'None';
+            document.getElementById('bookingSummary').innerHTML = `
+                Total Amount: Rs.${totalAmount}
+                <br>
+                Selected Seats: ${seatsText}
+            `;
+        }
+
+        function calculateTotalAmount() {
+            let amount = 0;
+            selectedSeats.forEach(seat => {
+                amount += SEAT_PRICES[seat.type];
+            });
+            return amount;
+        }
+    </script>
+</body>
+</html>

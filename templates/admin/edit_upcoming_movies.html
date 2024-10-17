@@ -1,0 +1,116 @@
+<!-- templates/admin/edit_upcoming_movie.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Upcoming Movie</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #4a148c;
+        }
+        .movie-card {
+            display: flex;
+            flex-direction: column; /* Stack elements vertically */
+            align-items: center;
+            margin: 20px auto;
+            border: 1px solid #d1d5db;
+            border-radius: 5px;
+            padding: 10px;
+            background-color: #fff;
+            width: 80%; /* Adjust width as needed */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .movie-card img {
+            width: 100px; /* Fixed width for the poster */
+            margin-bottom: 10px; /* Space below the image */
+        }
+        .form-group {
+            margin-bottom: 15px; /* Space between form fields */
+            width: 100%; /* Full width for form fields */
+        }
+        .form-group label {
+            display: block; /* Block display for labels */
+            margin-bottom: 5px; /* Space below labels */
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; /* Full width for inputs */
+            padding: 8px; /* Padding for inputs */
+            border: 1px solid #d1d5db; /* Border for inputs */
+            border-radius: 5px; /* Rounded corners */
+        }
+        .btn {
+            padding: 10px 20px;
+            background-color: #6b46c1;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 10px; /* Space above the button */
+            transition: background-color 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #4a148c;
+        }
+    </style>
+</head>
+<body>
+    <h1>Edit Movie: {{ movie.title }}</h1>
+    <div class="movie-card">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="title">Title:</label>
+                <input type="text" id="title" name="title" value="{{ movie.title }}" required>
+            </div>
+            <div class="form-group">
+                <label for="category">Category:</label>
+                <select id="category" name="category" required>
+                    {% for category in categories %}
+                        <option value="{{ category.id }}" {% if category.id == movie.category.id %}selected{% endif %}>{{ category.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="release_date">Release Date:</label>
+                <input type="date" id="release_date" name="release_date" value="{{ movie.release_date|date:'Y-m-d' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description:</label>
+                <textarea id="description" name="description" required>{{ movie.description }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="director">Director:</label>
+                <input type="text" id="director" name="director" value="{{ movie.director }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="duration">Duration:</label>
+                <input type="text" id="duration" name="duration" value="{{ movie.duration }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="price">Price:</label>
+                <input type="number" id="price" name="price" value="{{ movie.price }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="poster">Poster:</label>
+                <input type="file" id="poster" name="poster">
+                <small>Leave blank to keep the current poster.</small>
+            </div>
+
+            <button type="submit" class="btn">Save Changes</button>
+        </form>
+        <a href="#" class="btn">Cancel</a>
+    </div>
+</body>
+</html>

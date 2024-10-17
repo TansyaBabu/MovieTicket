@@ -1,0 +1,199 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Confirmation & Feedback</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif; /* Changed to Poppins for consistency */
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+        }
+        header {
+            background-color: #4a148c; /* Dark purple background */
+            padding: 15px 0;
+            color: white;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        .navbar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .navbar a:hover {
+            background-color: #6b46c1; /* Lighter purple on hover */
+        }
+        .container {
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            width: 600px;
+            text-align: center;
+            margin-top: 80px; /* Space for fixed header */
+        }
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .details {
+            margin-bottom: 20px;
+            font-size: 16px;
+            color: #666;
+        }
+        .details div {
+            margin-bottom: 10px;
+        }
+        .button, .feedback-button {
+            display: inline-block;
+            padding: 10px 20px;
+            color: #fff;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+        .button {
+            background-color: #28a745; /* Green for main button */
+        }
+        .button.back {
+            background-color: #007bff; /* Blue for back button */
+        }
+        .feedback-button {
+            background-color: #007bff; /* Blue for feedback button */
+        }
+        form {
+            margin-top: 20px;
+            text-align: left;
+        }
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        h2 {
+            margin-top: 30px;
+            color: #333;
+        }
+        #recordButton {
+            padding: 10px 20px;
+            background-color: #28a745; /* Green for record button */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        #recordButton:hover {
+            background-color: #218838; /* Darker green on hover */
+        }
+    </style>
+    <script src="{% static 'js/voice_feedback.js' %}"></script>
+</head>
+<body>
+    <header>
+        <div class="navbar">
+            <a href="{% url 'user_dashboard' %}">Home</a>
+            <a href="#">Movies</a>
+            <a href="{% url 'contact' %}">Contact</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1>Booking Confirmation</h1>
+        <div class="details">
+            <div><strong>Movie:</strong> {{ movie.title }}</div>
+            <div><strong>Theatre:</strong> {{ theatre.name }}</div>
+            <div><strong>Showtime:</strong> {{ showtime.showtime|date:"h:i A" }} on {{ selected_date|date:"d M Y" }}</div>
+            <div><strong>Selected Seats:</strong> {{ booking.selected_seats }}</div>
+            <div><strong>Total Amount:</strong> ₹{{ booking.total_amount }}</div>
+            <div><strong>Status:</strong> {{ booking.status }}</div>
+            <div><strong>Payment:</strong> {{ booking.payment }}</div>
+        </div>
+        
+        <a href="{% url 'user_dashboard' %}" class="button back">Back to Home</a>
+        <a href="{% url 'download_ticket_pdf' booking.id %}" class="button">Download Ticket as PDF</a>
+       
+    </div>
+        <!-- Text Feedback Form -->
+        <form action="{% url 'submit_feedback' booking.id %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="booking_id" value="{{ booking.id }}">
+            <label for="feedback">Leave Feedback:</label>
+            <textarea id="feedback" name="feedback" rows="4" placeholder="Share your experience..."></textarea>
+            <button type="submit" class="feedback-button">Submit Feedback</button>
+        </form>
+
+        <!-- Voice Feedback Section -->
+        <h2>Or, Provide Voice Feedback:</h2>
+        <button id="recordButton">Start Recording</button>
+        <p id="recordStatus">Press the button to record your feedback.</p>
+
+        <script>
+            let isRecording = false;
+            const recordButton = document.getElementById('recordButton');
+            const feedbackTextArea = document.getElementById('feedback');
+            const recordStatus = document.getElementById('recordStatus');
+
+            // Web Speech API for voice recognition
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            const recognition = new SpeechRecognition();
+            recognition.interimResults = false;  // Return final results only
+            recognition.lang = 'en-US';  // Set language (adjust as needed)
+
+            // Start or stop recording based on the current state
+            recordButton.addEventListener('click', () => {
+                if (!isRecording) {
+                    recognition.start();
+                    isRecording = true;
+                    recordButton.textContent = 'Stop Recording';
+                    recordStatus.textContent = 'Recording...';
+                } else {
+                    recognition.stop();
+                    isRecording = false;
+                    recordButton.textContent = 'Start Recording';
+                    recordStatus.textContent = 'Press the button to record your feedback.';
+                }
+            });
+
+            // When speech is successfully transcribed
+            recognition.addEventListener('result', (event) => {
+                const transcript = event.results[0][0].transcript;  // Get transcribed text
+                feedbackTextArea.value += transcript;  // Append the voice input to the feedback textarea
+                recordStatus.textContent = 'Voice feedback added.';
+            });
+
+            // Handle errors
+            recognition.addEventListener('error', (event) => {
+                console.error('Speech recognition error:', event.error);
+                recordStatus.textContent = 'An error occurred during voice feedback recording.';
+            });
+        </script>
+    </div>
+</body>
+</html>

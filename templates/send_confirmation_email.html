@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Booking Confirmation</title>
+</head>
+<body>
+    <h1>Booking Confirmation</h1>
+    <p>Dear {{ booking.user.username }},</p>
+    <p>Your booking has been confirmed.</p>
+    <p><strong>Movie:</strong> {{ booking.movie.title }}</p>
+    <p><strong>Theatre:</strong> {{ booking.theatre.name }}</p>
+    <p><strong>Showtime:</strong> {{ booking.showtime.time }}</p>
+    <p><strong>Selected Seats:</strong> {{ booking.selected_seats }}</p>
+    <p><strong>Total Amount:</strong> ₹{{ booking.total_amount }}</p>
+    <p><strong>Status:</strong> {{ booking.status }}</p>
+    <p>Thank you for booking with us!</p>
+</body>
+</html>

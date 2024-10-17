@@ -1,0 +1,21 @@
+<!-- templates/notifications/view_notifications.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Notifications</title>
+</head>
+<body>
+    <h1>Notifications</h1>
+    <ul>
+        {% for notification in notifications %}
+            <li>
+                <strong>{{ notification.created_at|date:"Y-m-d H:i" }}:</strong> {{ notification.message }}
+            </li>
+        {% empty %}
+            <li>No notifications available.</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'user_dashboard' %}">Back to Dashboard</a>
+</body>
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ movie.title }} - Details</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif; /* Changed to Poppins for consistency */
+            margin: 0;
+            padding: 0;
+            background-color: #f3f4f6; /* Light background color */
+        }
+
+        header {
+            background-color: #4a148c; /* Dark purple background */
+            padding: 10px 0;
+            color: white;
+            text-align: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .navbar a:hover {
+            background-color: #6b46c1; /* Lighter purple on hover */
+        }
+
+        .container {
+            max-width: 800px; /* Maximum width for the content */
+            margin: 80px auto; /* Center the container and add space for fixed header */
+            padding: 20px; /* Padding inside the container */
+            background: white; /* White background for the content area */
+            border-radius: 8px; /* Rounded corners */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        }
+
+        h1 {
+            color: #333; /* Dark text color for the heading */
+            margin-bottom: 10px; /* Space below the heading */
+        }
+
+        p {
+            font-size: 1.1em; /* Slightly larger font size for paragraphs */
+            margin: 10px 0; /* Spacing between paragraphs */
+            color: #555; /* Darker grey for paragraph text */
+        }
+
+        h2 {
+            color: #007bff; /* Blue color for subheadings */
+            margin-top: 20px; /* Space above subheadings */
+        }
+
+        form {
+            margin-top: 15px; /* Space above the form */
+            padding: 15px; /* Padding inside the form */
+            background-color: #f9f9f9; /* Light background for the form */
+            border-radius: 5px; /* Rounded corners for the form */
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for the form */
+        }
+
+        label {
+            font-weight: bold; /* Bold text for labels */
+        }
+
+        select {
+            padding: 5px; /* Padding inside the select box */
+            margin: 10px 0; /* Space above and below the select box */
+            border-radius: 5px; /* Rounded corners for the select box */
+            border: 1px solid #ccc; /* Light border for the select box */
+        }
+
+        button {
+            padding: 10px 15px; /* Padding for the button */
+            background-color: #28a745; /* Green background for the button */
+            color: white; /* White text color */
+            border: none; /* Remove border */
+            border-radius: 5px; /* Rounded corners for the button */
+            cursor: pointer; /* Pointer cursor on hover */
+            transition: background-color 0.3s; /* Smooth background color transition */
+        }
+
+        button:hover {
+            background-color: #218838; /* Darker green on hover */
+        }
+
+        a.back-button {
+            display: inline-block; /* Make the link a block element */
+            margin-top: 20px; /* Space above the link */
+            padding: 10px 15px; /* Padding for the link */
+            background-color: #007bff; /* Blue background for the button */
+            color: white; /* White text color */
+            text-decoration: none; /* Remove underline */
+            border-radius: 5px; /* Rounded corners for the button */
+            transition: background-color 0.3s; /* Smooth background color transition */
+        }
+
+        a.back-button:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+        }
+
+        #countdown {
+            font-size: 1.5em; /* Style for the countdown display */
+            color: #d9534f; /* Red color for countdown */
+            margin-top: 20px; /* Space above the countdown */
+        }
+    </style>
+    <script>
+        // Countdown Timer Function
+        function startCountdown(showtime) {
+            const countdownElement = document.getElementById('countdown');
+            const showtimeDate = new Date(showtime).getTime();
+
+            const interval = setInterval(() => {
+                const now = new Date().getTime();
+                const distance = showtimeDate - now;
+
+                // Time calculations for hours, minutes and seconds
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                // Display the result in the countdown element
+                countdownElement.innerHTML = `${hours}h ${minutes}m ${seconds}s`;
+
+                // If the countdown is over, display a message
+                if (distance < 0) {
+                    clearInterval(interval);
+                    countdownElement.innerHTML = "Showtime has started!";
+                }
+            }, 1000);
+        }
+
+        // Disable the submit button after the first click
+        function disableButton(button) {
+            button.disabled = true; // Disable the button
+            button.innerText = "Rating Submitted"; // Change button text
+        }
+
+        // Call the countdown function with the next showtime
+        window.onload = function() {
+            startCountdown('2023-10-30T20:00:00'); // Replace with actual showtime
+        };
+    </script>
+</head>
+<body>
+    <header>
+        <div class="navbar">
+            <a href="{% url 'user_dashboard' %}">Home</a>
+            <a href="#">Movies</a>
+            <a href="{% url 'contact' %}">Contact</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1>{{ movie.title }}</h1>
+        <p><strong>Average Rating:</strong> {{ movie.average_rating|default:"Not rated yet" }}</p>
+
+        <div id="countdown"></div> <!-- Countdown Timer Display -->
+
+        <h2>Rate this Movie</h2>
+        <form method="POST" action="{% url 'rate_movie' movie.id %}" onsubmit="disableButton(this.querySelector('button'));">
+            {% csrf_token %}
+            <label for="score">Rating (1-5):</label>
+            <select name="score" id="score" required>
+                <option value="">Select a rating</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+            <button type="submit">Submit Rating</button>
+        </form>
+
+        <a href="{% url 'user_dashboard' %}" class="back-button">Back to Dashboard</a> 
+    </div>
+</body>
+</html>

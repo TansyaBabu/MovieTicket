@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirm Booking</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif; /* Changed to Poppins for consistency */
+            margin: 0;
+            padding: 20px;
+            background: #f4f4f4; /* Light background color */
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #4a148c; /* Dark purple for the title */
+        }
+        .selected-seats {
+            margin: 20px 0;
+        }
+        .selected-seats ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .selected-seats li {
+            background: #ecf0f1; /* Light gray for seat items */
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .confirm-btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff; /* Bright blue for confirm button */
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+        .confirm-btn:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+        }
+        .confirm-btn:active {
+            background-color: #004494; /* Even darker blue on click */
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #777; /* Light gray for footer text */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Confirm Your Booking</h1>
+
+        <div class="selected-seats">
+            <h2>Selected Seats:</h2>
+            <ul id="selectedSeatsList">
+                <!-- Selected seats will be displayed here -->
+            </ul>
+        </div>
+
+        <!-- Confirm Booking Button -->
+        <button class="confirm-btn" onclick="confirmBooking()">Confirm Booking</button>
+
+        <div class="footer">
+            <p>If you have any questions, please contact support.</p>
+        </div>
+    </div>
+
+    <script>
+        // Assuming selected seats are passed as JSON to the template
+        const selectedSeats = JSON.parse(document.getElementById('selectedSeatsJson').textContent);
+
+        // Display the selected seats
+        const selectedSeatsList = document.getElementById('selectedSeatsList');
+        selectedSeats.forEach(seat => {
+            const listItem = document.createElement('li');
+            listItem.textContent = `Row ${seat.row}, Seat ${seat.seatNumber}`;
+            selectedSeatsList.appendChild(listItem);
+        });
+
+        function confirmBooking() {
+            fetch('/confirm-booking/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({ seats: selectedSeats })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Booking confirmed!');
+                    // Redirect or update the UI as needed
+                } else {
+                    alert('Failed to confirm booking: ' + data.error);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+
+    <!-- Include selected seats as a JSON script -->
+    <script id="selectedSeatsJson" type="application/json">
+        {{ selected_seats|safe }}
+    </script>
+
+</body>
+</html>

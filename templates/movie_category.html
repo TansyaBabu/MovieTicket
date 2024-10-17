@@ -1,0 +1,212 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ category }} Movies</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- Font Awesome for icons -->
+    <style>
+        /* Base styling for the body */
+        body {
+            font-family: 'Poppins', sans-serif; /* Changed to Poppins for consistency */
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #f3f4f6; /* Light gray background */
+        }
+
+        /* Header styling */
+        header {
+            background-color: #4a148c; /* Dark purple background */
+            padding: 10px 0;
+            color: white;
+            text-align: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .navbar a:hover {
+            background-color: #6b46c1; /* Lighter purple on hover */
+        }
+
+        /* Main content styling */
+        .main-content {
+            padding: 80px 20px 20px; /* Adjusted for fixed header */
+            max-width: 1200px;
+            margin: auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .main-content h1 {
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center; /* Centered title */
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            background-color: #fff;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        img {
+            max-width: 150px;
+            max-height: 200px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .movie-info {
+            flex: 1;
+        }
+
+        .movie-title {
+            font-weight: bold;
+            font-size: 18px;
+            color: #4a148c; /* Dark purple for titles */
+        }
+
+        .movie-release-date {
+            font-size: 14px;
+            color: #777;
+            margin: 5px 0;
+        }
+
+        .movie-description {
+            font-size: 14px;
+            color: #666;
+            margin: 10px 0;
+        }
+
+        .movie-details {
+            font-size: 12px;
+            color: #888;
+            margin-top: 10px;
+        }
+
+        .showtime-container {
+            margin-top: 15px;
+        }
+
+        .showtime-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #28a745; /* Green background */
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 5px;
+            margin: 5px 0;
+            transition: background-color 0.3s;
+        }
+
+        .showtime-button:hover {
+            background-color: #218838; /* Darker green on hover */
+        }
+
+        .details-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff; /* Blue background */
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 5px;
+            margin: 5px 0;
+            transition: background-color 0.3s;
+        }
+
+        .details-button:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+        }
+
+        .wishlist-button {
+            background-color: #e74c3c; /* Red background */
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .wishlist-button:hover {
+            background-color: #c0392b; /* Darker red on hover */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="navbar">
+            <a href="{% url 'user_dashboard' %}">Home</a>
+            <a href="#">Movies</a>
+            <a href="{% url 'contact' %}">Contact</a>
+        </div>
+    </header>
+
+    <div class="main-content">
+        <h1>{{ category }} Movies</h1>
+        <ul>
+            {% for movie in movies %}
+                <li>
+                    <img src="{% if movie.poster %}{{ movie.poster.url }}{% else %}{% static 'images/default_poster.jpg' %}{% endif %}" alt="{{ movie.title }}">
+                    <div class="movie-info">
+                        <div class="movie-title">{{ movie.title }}</div>
+                        <div class="movie-release-date">Release Date: {{ movie.release_date }}</div>
+                        <div class="movie-description">{{ movie.description }}</div>
+                        <div class="movie-details">
+                            Director: {{ movie.director }}<br>
+                            Duration: {{ movie.duration }} minutes<br>
+                            Price: ${{ movie.price }}
+                        </div>
+                        <div class="showtime-container">
+                            <a href="{% url 'movie_showtimes' movie.id %}" class="showtime-button">View Showtimes</a>
+                            <a href="{% url 'movie_detail' movie.id %}" class="details-button">View Details</a>
+                            <form action="{% url 'add_to_wishlist' movie.id %}" method="post" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="wishlist-button">
+                                    <i class="fa fa-heart"></i> Add to Wishlist
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>

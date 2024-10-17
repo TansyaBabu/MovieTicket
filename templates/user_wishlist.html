@@ -1,0 +1,142 @@
+<!-- templates/user_wishlist.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Wishlist</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- Font Awesome for icons -->
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f3f4f6;
+            margin: 0;
+            padding: 0;
+        }
+        /* Navbar styling */
+        header {
+            background-color: #4a148c; /* Dark purple background */
+            padding: 10px 0;
+            color: white;
+            text-align: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+        .navbar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .navbar a:hover {
+            background-color: #6b46c1; /* Lighter purple on hover */
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            margin-top: 80px; /* Adjusted for fixed header */
+        }
+        h2 {
+            text-align: center;
+            color: #4a148c; /* Dark purple */
+            margin-bottom: 20px;
+        }
+        .wishlist-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            transition: box-shadow 0.3s;
+        }
+        .wishlist-item:hover {
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .wishlist-item span {
+            font-size: 16px;
+            color: #333;
+            flex: 1;
+        }
+        .remove-button {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .remove-button:hover {
+            background-color: #c0392b;
+        }
+        .empty-message {
+            text-align: center;
+            color: #888;
+            font-size: 18px;
+            margin-top: 20px;
+        }
+        .back-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007bff; /* Blue background */
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .back-button:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="navbar">
+            <a href="{% url 'user_dashboard' %}">Home</a>
+            <a href="{% url 'user_wishlist' %}">Wishlist</a>
+            <a href="#">Movies</a>
+            <a href="{% url 'contact' %}">Contact</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <h2>Your Wishlist</h2>
+        <div class="wishlist">
+            {% if wishlist_items %}
+                {% for item in wishlist_items %}
+                    <div class="wishlist-item">
+                        <span>{{ item.movie.title }}</span>
+                        <form action="{% url 'remove_from_wishlist' item.movie.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="remove-button">Remove</button>
+                        </form>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="empty-message">Your wishlist is empty.</p>
+            {% endif %}
+        </div>
+        <div style="text-align: center;">
+            <a href="{% url 'user_dashboard' %}" class="back-button">Back to Dashboard</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!-- templates/user/upcoming_movies.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upcoming Movies</title>
+  
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: rgba(51, 51, 51, 0.8);
+            padding: 10px 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+        .navbar .logo {
+            color: white;
+            font-size: 24px;
+            text-decoration: none;
+        }
+        .navbar ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            gap: 15px;
+        }
+        .navbar ul li a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            transition: background-color 0.3s, color 0.3s;
+            border-radius: 5px;
+        }
+        .navbar ul li a:hover {
+            background-color: #575757;
+        }
+        .main-content {
+            padding: 80px 20px 20px; /* Added top padding to avoid overlap with navbar */
+            text-align: center;
+        }
+        h1 {
+            color: #4a148c;
+        }
+        .movie-card {
+            display: flex;
+            align-items: center;
+            margin: 20px auto;
+            border: 1px solid #d1d5db;
+            border-radius: 5px;
+            padding: 10px;
+            background-color: #fff;
+            width: 80%; /* Adjust width as needed */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .movie-card img {
+            width: 100px; /* Fixed width for the poster */
+            margin-right: 20px; /* Space between the image and text */
+        }
+        .details-box {
+            flex: 1; /* Take the remaining space */
+        }
+        .details-box h3 {
+            margin: 0;
+            color: #4a148c;
+        }
+        .details-box p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="navbar">
+            <a href="{% url 'user_dashboard' %}" class="logo">Movie Ticket Booking</a>
+            <ul>
+                <li><a href="{% url 'user_dashboard' %}">Home</a></li>
+                <li><a href="{% url 'user_profile' %}">My Account</a></li>
+                <li><a href="{% url 'view_bookings' %}">Bookings</a></li>
+                <li><a href="{% url 'user_upcoming_movies' %}">Upcoming Movies</a></li>
+                <li><a href="{% url 'logout' %}">Logout</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="main-content">
+        <h1>Upcoming Movies</h1>
+        
+        {% if upcoming_movies %}
+            <div class="movie-list">
+                {% for movie in upcoming_movies %}
+                <div class="movie-card">
+                    <img src="{{ movie.poster.url }}" alt="{{ movie.title }} Poster">
+                    <div class="details-box">
+                        <h3>{{ movie.title }}</h3>
+                        <p><strong>Category:</strong> {{ movie.category.name }}</p>
+                        <p><strong>Release Date:</strong> {{ movie.release_date }}</p>
+                        <p><strong>Description:</strong> {{ movie.description }}</p>
+                        <p><strong>Director:</strong> {{ movie.director }}</p>
+                        <p><strong>Duration:</strong> {{ movie.duration }}</p>
+                        <p><strong>Price:</strong> {{ movie.price }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No upcoming movies found.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

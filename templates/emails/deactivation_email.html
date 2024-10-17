@@ -1,0 +1,52 @@
+<!-- templates/emails/deactivation_email.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Deactivated</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        p {
+            color: #555;
+        }
+        .footer {
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Account Deactivated</h1>
+        <p>Dear {{ user.username }},</p>
+        <p>We wanted to inform you that your account has been deactivated. If you believe this is a mistake, please contact our support team for assistance.</p>
+        <p>Thank you for being a valued user.</p>
+        <p>Best regards,</p>
+        <p>The [Your Company] Team</p>
+
+        <div class="footer">
+            <p>If you have any questions, feel free to contact us at support@example.com.</p>
+            <p>© {{ current_year }} [Your Company]. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Category</title>
+    <link rel="stylesheet" href="{% static 'css/admin_dashboard.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Admin Dashboard</h1>
+        <nav>
+            <ul>
+                <li><a href="{% url 'admin_dashboard' %}">Dashboard</a></li>
+                <li><a href="{% url 'view_customers' %}">Manage Users</a></li>
+                <li><a href="{% url 'list_categories' %}">Categories</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="sidebar">
+        <ul>
+            <li class="{% if request.path == '/admin_dashboard/' %}active{% endif %}">
+                <a href="{% url 'admin_dashboard' %}">Dashboard</a>
+            </li>
+            <li class="{% if request.path == '/view-customers/' %}active{% endif %}">
+                <a href="{% url 'view_customers' %}">Manage Users</a>
+            </li>
+            <li class="{% if request.path == '/categories/' %}active{% endif %}">
+                <a href="{% url 'list_categories' %}">Categories</a>
+            </li>
+            <!-- Other links... -->
+        </ul>
+    </div>
+    <div class="main-content">
+        <h2>Delete Category</h2>
+        <p>Are you sure you want to delete the category "{{ category.name }}"?</p>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit">Confirm</button>
+            <a href="{% url 'list_categories' %}">Cancel</a>
+        </form>
+    </div>
+</body>
+</html>

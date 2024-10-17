@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Showtime</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f4f8;
+            color: #333;
+            line-height: 1.6;
+        }
+        .navbar {
+            background-color: #3a0ca3;
+            color: white;
+            padding: 1rem 2rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .navbar-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .navbar h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        .navbar ul {
+            list-style: none;
+            display: flex;
+        }
+        .navbar ul li {
+            margin-left: 1.5rem;
+        }
+        .navbar ul li a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .navbar ul li a:hover {
+            color: #4361ee;
+        }
+        .container {
+            max-width: 800px;
+            margin: 100px auto 40px;
+            padding: 40px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #3a0ca3;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        form {
+            display: grid;
+            gap: 20px;
+        }
+        label {
+            font-weight: 500;
+            color: #4361ee;
+            display: block;
+            margin-bottom: 5px;
+        }
+        select, input[type="time"], input[type="date"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #4361ee;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+        select:focus, input[type="time"]:focus, input[type="date"]:focus {
+            outline: none;
+            border-color: #3a0ca3;
+        }
+        .showtime-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        .showtime-group input[type="time"] {
+            width: calc(100% - 100px);
+            display: inline-block;
+        }
+        .remove-showtime {
+            position: absolute;
+            right: 0;
+            top: 0;
+            background-color: #e63946;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+        .remove-showtime:hover {
+            background-color: #c1121f;
+        }
+        #add-showtime-btn {
+            background-color: #4361ee;
+            color: white;
+            border: none;
+            padding: 12px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-bottom: 20px;
+            transition: background-color 0.3s ease;
+        }
+        #add-showtime-btn:hover {
+            background-color: #3a0ca3;
+        }
+        button[type="submit"] {
+            background-color: #4361ee;
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button[type="submit"]:hover {
+            background-color: #3a0ca3;
+        }
+        .error-message {
+            color: #e63946;
+            margin-top: 5px;
+            font-size: 14px;
+        }
+    </style>
+    <script>
+        // Your existing JavaScript code here
+    </script>
+</head>
+<body>
+    <div class="navbar">
+        <div class="navbar-content">
+            <h1>Theatre Management</h1>
+            <nav>
+                <ul>
+                    <li><a href="{% url 'theatre_owner_dashboard' %}">Home</a></li>
+                    <li><a href="#">Manage Theatres</a></li>
+                    <li><a href="#">Add Showtime</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Add Showtime</h2>
+        {% if error_message %}
+            <p class="error-message">{{ error_message }}</p>
+        {% endif %}
+        <form method="post" onsubmit="return validateForm()">
+            {% csrf_token %}
+            
+            <div>
+                <label for="movie">Movie:</label>
+                <select id="movie" name="movie" required>
+                    <option value="">Select a movie</option>
+                    {% for movie in movies %}
+                        <option value="{{ movie.id }}">{{ movie.title }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <label for="theatre">Theatre:</label>
+                <select id="theatre" name="theatre" required>
+                    <option value="">Select a theatre</option>
+                    {% for theatre in theatres %}
+                        <option value="{{ theatre.id }}">{{ theatre.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <label for="showtime">Showtime:</label>
+                <div id="showtimes">
+                    <div class="showtime-group">
+                        <input type="time" name="showtime" required>
+                        <button type="button" class="remove-showtime" onclick="this.parentElement.remove()">Remove</button>
+                        <span class="error-message"></span>
+                    </div>
+                </div>
+                <button type="button" id="add-showtime-btn" onclick="addShowtimeField()">+ Add Showtime</button>
+            </div>
+
+            <div>
+                <label for="start_date">Start Date:</label>
+                <input type="date" id="start_date" name="start_date" required>
+                <span id="start_date-error" class="error-message"></span>
+            </div>
+
+            <div>
+                <label for="end_date">End Date:</label>
+                <input type="date" id="end_date" name="end_date" required>
+                <span id="end_date-error" class="error-message"></span>
+            </div>
+
+            <button type="submit">Add Showtime</button>
+        </form>
+    </div>
+</body>
+</html>

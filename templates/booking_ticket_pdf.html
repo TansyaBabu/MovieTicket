@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Ticket</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif; /* Consistent font */
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9; /* Light background color */
+        }
+        .ticket-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff; /* White background for the ticket */
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            text-align: center;
+        }
+        .ticket-header {
+            background-color: #007bff; /* Bright blue for header */
+            color: #ffffff; /* White text */
+            padding: 15px;
+            border-radius: 8px 8px 0 0;
+        }
+        .ticket-header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .details {
+            margin: 20px 0;
+            font-size: 16px;
+            color: #555555; /* Dark gray for text */
+        }
+        .details div {
+            margin-bottom: 10px;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 8px 0;
+        }
+        .details div:last-of-type {
+            border-bottom: none;
+        }
+        .details strong {
+            color: #333333; /* Darker color for strong text */
+        }
+        .qr-code {
+            margin: 20px 0;
+        }
+        .qr-code img {
+            width: 150px; /* Fixed width for QR code */
+            height: auto; /* Maintain aspect ratio */
+        }
+        .ticket-footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #777777; /* Light gray for footer text */
+        }
+        .ticket-footer p {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="ticket-container">
+        <div class="ticket-header">
+            <h1>Movie Ticket</h1>
+        </div>
+        <div class="details">
+            <div><strong>Movie:</strong> {{ movie.title }}</div>
+            <div><strong>Theatre:</strong> {{ theatre.name }}</div>
+            <div><strong>Showtime:</strong> {{ showtime.showtime|date:"h:i A" }} on {{ showtime.start_date|date:"d M Y" }}</div>
+            <div><strong>Selected Seats:</strong> {{ booking.selected_seats }}</div>
+            <div><strong>Total Amount:</strong> ₹{{ booking.total_amount }}</div>
+            <div><strong>Status:</strong> {{ booking.status }}</div>
+            <div><strong>Payment:</strong> {{ booking.payment }}</div>
+        </div>
+
+        <h2>Your QR Code:</h2>
+        <div class="qr-code">
+            <img src="{{ MEDIA_URL }}{{ qr_code_filename }}" alt="QR Code" />
+        </div>
+        <div class="ticket-footer">
+            <p>Thank you for booking with us! Please show this ticket at the theatre entrance for entry.</p>
+        </div>
+    </div>
+</body>
+</html>

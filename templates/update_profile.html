@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Profile</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif; /* Changed to Poppins for consistency */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #f3f4f6; /* Light gray background */
+        }
+
+        header {
+            background-color: #007bff; /* Bright blue background */
+            color: #fff;
+            padding: 10px 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px; /* Increased height for better spacing */
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 24px; /* Increased font size for better visibility */
+        }
+
+        header nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            gap: 20px;
+        }
+
+        header nav ul li {
+            display: inline;
+        }
+
+        header nav ul li a {
+            color: #fff; /* White text for better contrast */
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        header nav ul li a:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+            color: #fff;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 80px 20px 20px; /* Added top padding to avoid overlap with header */
+            background-color: #fff; /* White background for main content */
+            border-radius: 8px;
+            margin-top: 60px; /* Adjusted to make space for the fixed header */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-container h2 {
+            margin-top: 0;
+            color: #2c3e50; /* Darker color for headings */
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2c3e50; /* Darker color for labels */
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        .btn-submit {
+            background-color: #28a745; /* Green for buttons */
+            color: #fff;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            display: block;
+            width: 100%;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .btn-submit:hover {
+            background-color: #218838; /* Darker green on hover */
+        }
+
+        .form-container a {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #007bff; /* Blue color for links */
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .form-container a:hover {
+            text-decoration: underline;
+        }
+
+        .btn-back {
+            background-color: #e74c3c; /* Red for back button */
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            display: block;
+            margin-bottom: 20px;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .btn-back:hover {
+            background-color: #c0392b; /* Darker red on hover */
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 10px;
+            }
+
+            .main-content {
+                margin-top: 60px; /* Adjusted for smaller screens */
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Update Profile</h1>
+        <nav>
+            <ul>
+                <li><a href="{% url 'user_dashboard' %}">Dashboard</a></li>
+                <li><a href="#">Notifications</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="main-content">
+        <button class="btn-back" onclick="window.history.back();">Back</button>
+        <div class="form-container">
+            <h2>Update Your Profile</h2>
+            <form method="post" action="{% url 'update_profile' %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="username">Name:</label>
+                    <input type="text" id="username" name="username" value="{{ user.username }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" value="{{ user.email }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone:</label>
+                    <input type="text" id="phone" name="phone" value="{{ user.profile.phone }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="address">Address:</label>
+                    <input type="text" id="address" name="address" value="{{ user.profile.address }}" required>
+                </div>
+                
+                <button type="submit" class="btn-submit">Update Profile</button>
+            </form>
+            <a href="#">Request a new OTP</a>
+        </div>
+    </div>
+</body>
+</html>

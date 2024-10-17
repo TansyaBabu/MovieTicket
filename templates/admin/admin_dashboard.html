@@ -1,0 +1,205 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f3f4f6;
+            color: #1f2937;
+            line-height: 1.6;
+        }
+        .container {
+            display: flex;
+        }
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background-color: #4a148c;
+            color: #e9d8fd;
+            padding: 20px;
+            position: fixed;
+        }
+        .sidebar h2 {
+            color: #d6bcfa;
+            margin-bottom: 30px;
+            font-size: 1.5em;
+            text-align: center;
+        }
+        .sidebar ul {
+            list-style: none;
+        }
+        .sidebar ul li {
+            margin-bottom: 15px;
+        }
+        .sidebar ul li a {
+            color: #e9d8fd;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .sidebar ul li a:hover {
+            background-color: #6b46c1;
+        }
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 20px;
+        }
+        .header {
+            background-color: #6b46c1;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            border-radius: 10px;
+        }
+        .header h1 {
+            font-size: 2em;
+        }
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .card {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        .card h3 {
+            color: #4a148c;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+        .card-body {
+            color: #4b5563;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #6b46c1;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #4a148c;
+        }
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: static;
+            }
+            .main-content {
+                margin-left: 0;
+            }
+        }
+    </style>
+
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <h2>Admin Panel</h2>
+            <ul>
+                <li><a href="#">Dashboard</a></li>
+                <li><a href="{% url 'view_customers' %}">Manage Users</a></li>
+                <li><a href="{% url 'list_categories' %}">Categories</a></li>
+                <li><a href="{% url 'list_movies' %}">Movies</a></li>
+                
+                <li><a href="{% url 'admin_theatre_list' %}">Manage Theatres</a></li>
+                <li><a href="{% url 'generate_report' %}">Generate Reports</a></li>
+              
+               
+                    <li><a href="{% url 'create_voucher' %}">Create Voucher</a></li>
+                    <li><a href="{% url 'voucher_usage_report' %}"> Voucher Report</a></li>
+
+                <li><a href="{% url 'send_notification' %}">Notifications</a></li>
+                
+
+
+                <li><a href="{% url 'sentiment_analysis' %}">Feedback Analysis</a></li>
+                <li><a href="{% url 'logout' %}">Logout</a></li>
+            </ul>
+        </div>
+        <div class="main-content">
+            <div class="header">
+                <h1>Welcome, Admin!</h1>
+            </div>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>Customers</h3>
+                    <div class="card-body">
+                        <p>Total customers: 1,234</p>
+                        <p>New this month: 56</p>
+                        <a href="{% url 'view_customers' %}" class="btn">View Details</a>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>Categories</h3>
+                    <div class="card-body">
+                        <p>Total categories: 8</p>
+                        <p>Most popular: Action</p>
+                        <a href="{% url 'list_categories' %}" class="btn">Manage Categories</a>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>Movies</h3>
+                    <div class="card-body">
+                        <p>Total movies: 250</p>
+                        <p>New releases: 12</p>
+                        <a href="{% url 'list_movies' %}" class="btn">Manage Movies</a>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>Theatres</h3>
+                    <div class="card-body">
+                        <p>Total theatres: 15</p>
+                        <p>Active screens: 45</p>
+                        <a href="{% url 'admin_theatre_list' %}" class="btn">Manage Theatres</a>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>Bookings</h3>
+                    <div class="card-body">
+                        <p>Total bookings: 5,678</p>
+                        <p>Today's bookings: 123</p>
+                        <a href="#" class="btn">View Bookings</a>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>Upcoming Movies</h3>
+                    <div class="card-body">
+                        <p>Total upcoming movies: {{ upcoming_movies.count }}</p>
+                        <p>Next release: {{ upcoming_movies.first.title }}</p>
+                        <a href="{% url 'upcoming_movies' %}" class="btn">View Upcoming Movies</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

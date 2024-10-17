@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Seating</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f4f8;
+            color: #333;
+            line-height: 1.6;
+        }
+        .navbar {
+            background-color: #3a0ca3;
+            color: white;
+            padding: 1rem 2rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .navbar-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .navbar h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        .navbar ul {
+            list-style: none;
+            display: flex;
+        }
+        .navbar ul li {
+            margin-left: 1.5rem;
+        }
+        .navbar ul li a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .navbar ul li a:hover {
+            color: #4361ee;
+        }
+        .form-container {
+            max-width: 800px;
+            margin: 120px auto 40px;
+            padding: 40px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #3a0ca3;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        form {
+            display: grid;
+            gap: 20px;
+        }
+        label {
+            font-weight: 500;
+            color: #4361ee;
+            display: block;
+            margin-bottom: 5px;
+        }
+        select, input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #4361ee;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+        select:focus, input[type="text"]:focus {
+            outline: none;
+            border-color: #3a0ca3;
+        }
+        input[type="submit"] {
+            background-color: #4361ee;
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        input[type="submit"]:hover {
+            background-color: #3a0ca3;
+        }
+    </style>
+    <script>
+        // Prevent the user from navigating back
+        window.history.pushState(null, null, window.location.href);
+        window.onpopstate = function () {
+            window.history.go(1);
+        };
+    </script>
+</head>
+<body>
+    <div class="navbar">
+        <div class="navbar-content">
+            <h1>Seating Management</h1>
+            <nav>
+                <ul>
+                    <li><a href="{% url 'theatre_owner_dashboard' %}">Home</a></li>
+                    <li><a href="#">Add Seating</a></li>
+                    <li><a href="{% url 'list_theatres' %}">Theatre List</a></li>
+                    <li><a href="#">Movie List</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <div class="form-container">
+        <h2>Add Seating for Theatre: {{ theatre.name }}</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div>
+                <label for="row">Row:</label>
+                <select id="row" name="row" required>
+                    {% for row in rows %}
+                        <option value="{{ row }}">{{ row }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label for="seat_number">Seat Number:</label>
+                <input type="text" id="seat_number" name="seat_number" required>
+            </div>
+            <input type="submit" value="Add Seating">
+        </form>
+    </div>
+</body>
+</html>

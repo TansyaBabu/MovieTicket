@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback Analysis Result</title>
+</head>
+<body>
+    <h1>Feedback Sentiment Analysis</h1>
+    <p><strong>Feedback:</strong> {{ feedback }}</p>
+    <p><strong>Sentiment:</strong> {{ sentiment }}</p>
+    <a href="{% url 'feedback_form' %}">Back to Feedback Form</a>
+</body>
+</html>

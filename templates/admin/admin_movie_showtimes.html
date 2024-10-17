@@ -1,0 +1,41 @@
+<!-- admin_view_seating.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seating Arrangement for {{ theatre.name }}</title>
+    <link rel="stylesheet" href="{% static 'css/admin_view_seating.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Seating Arrangement for {{ theatre.name }}</h1>
+    </header>
+
+    <div class="seating-arrangement">
+        <h2>Seating Details</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Row</th>
+                    <th>Seat</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for seat in seating_arrangement %}
+                    <tr>
+                        <td>{{ seat.row_number }}</td>
+                        <td>{{ seat.seat_number }}</td>
+                        <td>{{ seat.get_status_display }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="3">No seating arrangement found.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Theatre</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f4f8;
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 40px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #3a0ca3;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        form {
+            display: grid;
+            gap: 20px;
+        }
+        label {
+            font-weight: 500;
+            color: #4361ee;
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #4361ee;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+        input[type="text"]:focus, input[type="number"]:focus {
+            outline: none;
+            border-color: #3a0ca3;
+        }
+        input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        button[type="submit"] {
+            background-color: #4361ee;
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button[type="submit"]:hover {
+            background-color: #3a0ca3;
+        }
+        .error {
+            color: #e63946;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Add New Theatre</h1>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="name">Theatre Name</label>
+                <input type="text" id="name" name="name" required placeholder="Enter theatre name">
+            </div>
+            <div class="form-group">
+                <label for="location">Location</label>
+                <input type="text" id="location" name="location" required placeholder="Enter theatre location">
+            </div>
+            <div class="form-group">
+                <label for="rows">Rows (comma-separated)</label>
+                <input type="text" id="rows" name="rows" required placeholder="e.g. A,B,C,D">
+            </div>
+            <div class="form-group">
+                <label for="seats_per_row">Seats Per Row</label>
+                <input type="number" id="seats_per_row" name="seats_per_row" required placeholder="Enter number of seats per row">
+            </div>
+            <div class="form-group checkbox-group">
+                <input type="checkbox" id="parking_available" name="parking_available">
+                <label for="parking_available">Parking Available</label>
+            </div>
+            <div class="form-group">
+                <label for="food_and_beverage_options">Food and Beverage Options</label>
+                <input type="text" id="food_and_beverage_options" name="food_and_beverage_options" placeholder="Enter food and beverage options">
+            </div>
+            <div class="form-group">
+                <label for="accessibility_options">Accessibility Options</label>
+                <input type="text" id="accessibility_options" name="accessibility_options" placeholder="Enter accessibility options">
+            </div>
+            <button type="submit">Add Theatre</button>
+        </form>
+    </div>
+</body>
+</html>

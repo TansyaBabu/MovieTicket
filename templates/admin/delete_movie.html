@@ -1,0 +1,7 @@
+<h2>Delete Movie</h2>
+<p>Are you sure you want to delete the movie "{{ movie.title }}"?</p>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-delete">Delete</button>
+    <a href="{% url 'list_movies' %}" class="btn btn-cancel">Cancel</a>
+</form>

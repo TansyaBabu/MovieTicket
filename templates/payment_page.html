@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Page</title>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif; /* Changed to Poppins for consistency */
+            background-color: #f5f5f5; /* Light background color */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: #ffffff; /* White background for the payment container */
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            width: 400px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #4a148c; /* Dark purple for the title */
+        }
+
+        .amount {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .seats {
+            margin-bottom: 20px;
+            font-size: 16px;
+            color: #666;
+        }
+
+        #rzp-button {
+            background-color: #007bff; /* Bright blue for the payment button */
+            color: #ffffff;
+            border: none;
+            padding: 15px 25px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+
+        #rzp-button:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            .container {
+                width: 90%;
+            }
+
+            #rzp-button {
+                padding: 12px 20px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Payment</h1>
+
+        <div class="amount">Total Amount: ₹<span id="totalAmount">{{ totalAmount }}</span></div>
+
+        <div class="seats">Selected Seats: <span id="selectedSeats">{{ selected_seats }}</span></div>
+
+        <form id="razorpay-form" action="{% url 'booking_confirmation' booking_id %}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="razorpay_payment_id" id="razorpay_payment_id">
+            <input type="hidden" name="razorpay_order_id" id="razorpay_order_id">
+            <input type="hidden" name="razorpay_signature" id="razorpay_signature">
+            <input type="hidden" name="booking_id" id="booking_id" value="{{ booking_id }}"> <!-- Hidden field for booking ID -->
+        </form>
+
+        <button id="rzp-button" onclick="payWithRazorpay()">Pay Now</button>
+    </div>
+
+    <script>
+        function payWithRazorpay() {
+            const amountInPaisa = document.getElementById('totalAmount').innerText.trim() * 100; // Convert to paisa
+            const selectedSeats = document.getElementById('selectedSeats').innerText.trim();
+
+            var options = {
+                "key": "rzp_test_AnXj68fT4zKwe0", // Enter the Key ID generated from the Razorpay Dashboard
+                "amount": amountInPaisa, // Amount is in paisa
+                "currency": "INR",
+                "name": "Your Movie Booking",
+                "description": "Test Transaction",
+                "handler": function (response) {
+                    document.getElementById('razorpay_payment_id').value = response.razorpay_payment_id;
+                    document.getElementById('razorpay_order_id').value = response.razorpay_order_id;
+                    document.getElementById('razorpay_signature').value = response.razorpay_signature;
+
+                    // Submit the form
+                    document.getElementById('razorpay-form').submit();
+                },
+                "prefill": {
+                    "name": "Your Name",
+                    "email": "Your Email",
+                    "contact": "Your Phone Number"
+                },
+                "notes": {
+                    "selected_seats": selectedSeats
+                },
+                "theme": {
+                    "color": "#007bff" // Theme color for Razorpay
+                }
+            };
+
+            var rzp1 = new Razorpay(options);
+            rzp1.open();
+        }
+    </script>
+</body>
+</html>

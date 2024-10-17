@@ -1,0 +1,76 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback Submitted</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif; /* Changed to Poppins for consistency */
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        header {
+            background-color: #4a148c; /* Dark purple background */
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        main {
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2em;
+        }
+
+        h2 {
+            margin-top: 0;
+            font-size: 1.5em;
+        }
+
+        p {
+            font-size: 1em;
+            margin: 20px 0;
+        }
+
+        a {
+            text-decoration: none;
+            color: #007bff; /* Bright blue for links */
+            font-weight: bold;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            margin-top: 20px;
+            padding: 10px;
+            text-align: center;
+            background-color: #4a148c; /* Dark purple background */
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Feedback Submitted</h1>
+    </header>
+    <main>
+        <h2>Thank you for your feedback!</h2>
+        <p>Your feedback has been successfully submitted. We appreciate your input.</p>
+        <a href="{% url 'user_dashboard' %}">Go to Dashboard</a> <!-- Link to user dashboard or another relevant page -->
+    </main>
+    <footer>
+        <!-- Optional: Footer content -->
+    </footer>
+</body>
+</html>

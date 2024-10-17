@@ -1,0 +1,89 @@
+<!-- templates/admin/list_upcoming_movies.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upcoming Movies - Admin Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f3f4f6;
+            color: #1f2937;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        h1 {
+            color: #4a148c;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #d1d5db;
+        }
+        th {
+            background-color: #6b46c1;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        img {
+            max-width: 100px; /* Set a max width for the poster images */
+            height: auto; /* Maintain aspect ratio */
+        }
+    </style>
+</head>
+<body>
+    <h1>Upcoming Movies</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Release Date</th>
+                <th>Description</th>
+                <th>Poster</th>
+                <th>Director</th>
+                <th>Duration</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for movie in upcoming_movies %}
+            <tr>
+                <td>{{ movie.title }}</td>
+                <td>{{ movie.category.name }}</td>
+                <td>{{ movie.release_date }}</td>
+                <td>{{ movie.description }}</td>
+                <td><img src="{{ movie.poster.url }}" alt="{{ movie.title }} Poster"></td> <!-- Display the poster image -->
+                <td>{{ movie.director }}</td>
+                <td>{{ movie.duration }}</td>
+                 <!-- Display the duration -->
+                 <td>{{ movie.price }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7">No upcoming movies found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

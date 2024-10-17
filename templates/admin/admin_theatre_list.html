@@ -1,0 +1,176 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - List Theatres</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f3f4f6;
+            color: #1f2937;
+            line-height: 1.6;
+        }
+        .container {
+            display: flex;
+        }
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background-color: #4a148c;
+            color: #e9d8fd;
+            padding: 20px;
+            position: fixed;
+        }
+        .sidebar h2 {
+            color: #d6bcfa;
+            margin-bottom: 30px;
+            font-size: 1.5em;
+            text-align: center;
+        }
+        .sidebar ul {
+            list-style: none;
+        }
+        .sidebar ul li {
+            margin-bottom: 15px;
+        }
+        .sidebar ul li a {
+            color: #e9d8fd;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .sidebar ul li a:hover {
+            background-color: #6b46c1;
+        }
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 20px;
+        }
+        .header {
+            background-color: #6b46c1;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            border-radius: 10px;
+        }
+        .header h1 {
+            font-size: 2em;
+        }
+        .navbar {
+            background-color: #4a148c;
+            padding: 10px 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .navbar ul {
+            list-style-type: none;
+            display: flex;
+            justify-content: flex-end;
+        }
+        .navbar ul li {
+            margin-left: 20px;
+        }
+        .navbar ul li a {
+            color: #e9d8fd;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        .navbar ul li a:hover {
+            color: #fff;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            padding: 15px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+            color: #333;
+            font-weight: bold;
+        }
+        td {
+            color: #555;
+        }
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: static;
+            }
+            .main-content {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <h2>Admin Panel</h2>
+            <ul>
+                <li><a href="{% url 'admin_dashboard' %}">Dashboard</a></li>
+                <li><a href="{% url 'view_customers' %}">Manage Users</a></li>
+                <li><a href="{% url 'list_categories' %}">Categories</a></li>
+                <li><a href="{% url 'list_movies' %}">Movies</a></li>
+                <li class="active"><a href="{% url 'admin_theatre_list' %}">Manage Theatres</a></li>
+                <li><a href="{% url 'sentiment_analysis' %}">Feedback Analysis</a></li>
+                <li><a href="{% url 'logout' %}">Logout</a></li>
+            </ul>
+        </div>
+        <div class="main-content">
+            <div class="navbar">
+                <ul>
+                    <li><a href="{% url 'admin_dashboard' %}">Home</a></li>
+                    <li><a href="#">Notifications</a></li>
+                    <li><a href="#">Messages</a></li>
+                </ul>
+            </div>
+            <div class="header">
+                <h1>Theatres List</h1>
+            </div>
+            <table>
+                <tr>
+                    <th>Theatre Name</th>
+                    <th>Location</th>
+                    <th>Total Seats</th>
+                </tr>
+                {% for theatre in theatres %}
+                <tr>
+                    <td>{{ theatre.name }}</td>
+                    <td>{{ theatre.location }}</td>
+                    <td>{{ theatre.total_seats }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3">No theatres found.</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</body>
+</html>

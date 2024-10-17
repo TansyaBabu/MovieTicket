@@ -1,0 +1,147 @@
+<!-- templates/admin/upcoming_movies.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upcoming Movies</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f4f4;
+            color: #1f2937;
+            line-height: 1.6;
+        }
+        .navbar {
+            background-color: #4a148c;
+            padding: 10px 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .navbar ul {
+            list-style-type: none;
+            display: flex;
+            justify-content: flex-end;
+        }
+        .navbar ul li {
+            margin-left: 20px;
+        }
+        .navbar ul li a {
+            color: #e9d8fd;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        .navbar ul li a:hover {
+            color: #fff;
+        }
+        h1 {
+            color: #4a148c;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #d1d5db;
+        }
+        th {
+            background-color: #6b46c1;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #6b46c1;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-bottom: 20px; /* Space below the button */
+            transition: background-color 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #4a148c;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 10px; /* Space between buttons */
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <ul>
+            <li><a href="{% url 'upcoming_movies' %}">Upcoming Movies</a></li>
+            <li><a href="{% url 'add_upcoming_movie' %}">Add Upcoming Movie</a></li>
+            <li><a href="{% url 'list_categories' %}">Categories</a></li>
+            <li><a href="{% url 'voucher_usage_report' %}">Voucher Usage</a></li>
+            <li><a href="{% url 'logout' %}">Logout</a></li>
+        </ul>
+    </div>
+
+    <h1>Upcoming Movies</h1>
+    
+    <a href="{% url 'add_upcoming_movie' %}" class="btn">Add Upcoming Movie</a> <!-- Button to add a new upcoming movie -->
+    
+    {% if upcoming_movies %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Category</th>
+                    <th>Release Date</th>
+                    <th>Description</th>
+                    <th>Poster</th>
+                    <th>Director</th>
+                    <th>Duration</th>
+                    <th>Price</th>
+                    <th>Actions</th> <!-- New column for actions -->
+                </tr>
+            </thead>
+            <tbody>
+                {% for movie in upcoming_movies %}
+                <tr>
+                    <td>{{ movie.title }}</td>
+                    <td>{{ movie.category.name }}</td>
+                    <td>{{ movie.release_date }}</td>
+                    <td>{{ movie.description }}</td>
+                    <td><img src="{{ movie.poster.url }}" alt="{{ movie.title }} Poster" style="width: 100px;"></td> <!-- Display the poster image -->
+                    <td>{{ movie.director }}</td>
+                    <td>{{ movie.duration }}</td> 
+                    <td>{{ movie.price }}</td> 
+                    <td>
+                        <div class="action-buttons">
+                            <a href="{% url 'edit_upcoming_movie' movie.id %}" class="btn">Edit</a> <!-- Edit button -->
+                            <form action="#" method="POST" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn" style="background-color: #e53e3e;">Delete</button> <!-- Delete button -->
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No upcoming movies found.</p>
+    {% endif %}
+</body>
+</html>

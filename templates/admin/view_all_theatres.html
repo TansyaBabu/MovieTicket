@@ -1,0 +1,26 @@
+<!-- view_all_theatres.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Theatres</title>
+</head>
+<body>
+    <header>
+        <h1>All Theatres</h1>
+    </header>
+
+    <div class="theatre-list">
+        <ul>
+            {% for theatre in theatres %}
+                <li>
+                    <a href="{% url 'admin_view_seating' theatre_id=theatre.id %}">{{ theatre.name }}</a>
+                </li>
+            {% empty %}
+                <li>No theatres available.</li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>

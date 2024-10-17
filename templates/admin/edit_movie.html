@@ -1,0 +1,283 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Movie - Admin Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f3f4f6;
+            color: #1f2937;
+            line-height: 1.6;
+        }
+        .container {
+            display: flex;
+        }
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background-color: #4a148c;
+            color: #e9d8fd;
+            padding: 20px;
+            position: fixed;
+        }
+        .sidebar h2 {
+            color: #d6bcfa;
+            margin-bottom: 30px;
+            font-size: 1.5em;
+            text-align: center;
+        }
+        .sidebar ul {
+            list-style: none;
+        }
+        .sidebar ul li {
+            margin-bottom: 15px;
+        }
+        .sidebar ul li a {
+            color: #e9d8fd;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .sidebar ul li a:hover, .sidebar ul li.active a {
+            background-color: #6b46c1;
+        }
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 20px;
+        }
+        .header {
+            background-color: #6b46c1;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .header h1 {
+            font-size: 2em;
+        }
+        .navbar {
+            background-color: #4a148c;
+            padding: 10px 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .navbar ul {
+            list-style-type: none;
+            display: flex;
+            justify-content: flex-end;
+        }
+        .navbar ul li {
+            margin-left: 20px;
+        }
+        .navbar ul li a {
+            color: #e9d8fd;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        .navbar ul li a:hover {
+            color: #fff;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select, textarea, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #6b46c1;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #4a148c;
+        }
+        .error-message {
+            color: red;
+            margin-top: 5px;
+        }
+        img {
+            max-width: 100px;
+            margin-top: 10px;
+        }
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: static;
+            }
+            .main-content {
+                margin-left: 0;
+            }
+        }
+    </style>
+    <script>
+        function validateForm() {
+            const title = document.getElementById('title').value;
+            const director = document.getElementById('director').value;
+            const price = document.getElementById('price').value;
+            const poster = document.getElementById('poster').value;
+            let valid = true;
+
+            // Title validation: only alphabets and spaces
+            const titlePattern = /^[A-Za-z\s]+$/;
+            if (!titlePattern.test(title)) {
+                document.getElementById('title-error').textContent = "Title must contain only alphabets and spaces.";
+                valid = false;
+            } else {
+                document.getElementById('title-error').textContent = "";
+            }
+
+            // Director validation: only alphabets and spaces
+            const directorPattern = /^[A-Za-z\s]+$/;
+            if (!directorPattern.test(director)) {
+                document.getElementById('director-error').textContent = "Director must contain only alphabets and spaces.";
+                valid = false;
+            } else {
+                document.getElementById('director-error').textContent = "";
+            }
+
+            // Price validation: must be a valid number greater than zero
+            if (isNaN(price) || price <= 0) {
+                document.getElementById('price-error').textContent = "Price must be a valid number greater than zero.";
+                valid = false;
+            } else {
+                document.getElementById('price-error').textContent = "";
+            }
+
+            // Poster validation: must be a png or jpeg format
+            if (poster) {
+                const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+                if (!allowedExtensions.exec(poster)) {
+                    document.getElementById('poster-error').textContent = "Poster must be in png or jpeg format.";
+                    valid = false;
+                } else {
+                    document.getElementById('poster-error').textContent = "";
+                }
+            }
+
+            return valid;
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <h2>Admin Panel</h2>
+            <ul>
+                <li><a href="{% url 'admin_dashboard' %}">Dashboard</a></li>
+                <li><a href="{% url 'view_customers' %}">Manage Users</a></li>
+                <li><a href="{% url 'list_categories' %}">Categories</a></li>
+                <li><a href="{% url 'list_movies' %}">Movies</a></li>
+                <li><a href="{% url 'admin_theatre_list' %}">Manage Theatres</a></li>
+                <li><a href="{% url 'sentiment_analysis' %}">Feedback Analysis</a></li>
+                <li><a href="{% url 'logout' %}">Logout</a></li>
+            </ul>
+        </div>
+        <div class="main-content">
+            <div class="navbar">
+                <ul>
+                    <li><a href="{% url 'admin_dashboard' %}">Home</a></li>
+                    <li><a href="#">Profile</a></li>
+                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                </ul>
+            </div>
+            <div class="header">
+                <h1>Edit Movie</h1>
+            </div>
+            <form method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" id="title" name="title" value="{{ movie.title }}" required>
+                    <span id="title-error" class="error-message"></span>
+                </div>
+                <div class="form-group">
+                    <label for="category">Category</label>
+                    <select id="category" name="category" required>
+                        {% for category in categories %}
+                        <option value="{{ category.id }}" {% if category.id == movie.category.id %}selected{% endif %}>
+                            {{ category.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="release_date">Release Date</label>
+                    <input type="date" id="release_date" name="release_date" value="{{ movie.release_date }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description" required>{{ movie.description }}</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="poster">Poster Image</label>
+                    <input type="file" id="poster" name="poster">
+                    {% if movie.poster %}
+                    <img src="{{ movie.poster.url }}" alt="Poster">
+                    {% endif %}
+                    <span id="poster-error" class="error-message"></span>
+                </div>
+                <div class="form-group">
+                    <label for="director">Director</label>
+                    <input type="text" id="director" name="director" value="{{ movie.director }}" required>
+                    <span id="director-error" class="error-message"></span>
+                </div>
+                <div class="form-group">
+                    <label for="duration">Duration</label>
+                    <input type="time" id="duration" name="duration" value="{{ movie.duration|time:'H:i' }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="price">Price</label>
+                    <input type="number" id="price" name="price" value="{{ movie.price }}" step="0.01" required>
+                    <span id="price-error" class="error-message"></span>
+                </div>
+                <button type="submit" class="btn btn-update">Update Movie</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

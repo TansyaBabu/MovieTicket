@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Showtime</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f4f8;
+            color: #333;
+            line-height: 1.6;
+        }
+        .navbar {
+            background-color: #3a0ca3;
+            color: white;
+            padding: 1rem 2rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .navbar-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .navbar h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        .navbar ul {
+            list-style: none;
+            display: flex;
+        }
+        .navbar ul li {
+            margin-left: 1.5rem;
+        }
+        .navbar ul li a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .navbar ul li a:hover {
+            color: #4361ee;
+        }
+        .container {
+            max-width: 600px;
+            margin: 100px auto 40px;
+            padding: 40px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #3a0ca3;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        form {
+            display: grid;
+            gap: 20px;
+        }
+        label {
+            font-weight: 500;
+            color: #4361ee;
+            display: block;
+            margin-bottom: 5px;
+        }
+        select, input[type="time"], input[type="date"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #4361ee;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+        select:focus, input[type="time"]:focus, input[type="date"]:focus {
+            outline: none;
+            border-color: #3a0ca3;
+        }
+        button[type="submit"] {
+            background-color: #4361ee;
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button[type="submit"]:hover {
+            background-color: #3a0ca3;
+        }
+        .error-message {
+            color: #e63946;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="navbar-content">
+            <h1>Theatre Management</h1>
+            <nav>
+                <ul>
+                    <li><a href="{% url 'theatre_owner_dashboard' %}">Dashboard</a></li>
+                    <li><a href="{% url 'view_showtimes' %}">View Showtimes</a></li>
+                    <li><a href="{% url 'add_showtime' %}">Add Showtime</a></li>
+                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Edit Showtime</h2>
+        {% if error_message %}
+            <div class="error-message">{{ error_message }}</div>
+        {% endif %}
+        <form method="post" onsubmit="return validateForm()">
+            {% csrf_token %}
+            
+            <div>
+                <label for="movie">Movie:</label>
+                <select id="movie" name="movie" required>
+                    {% for movie in movies %}
+                        <option value="{{ movie.id }}" {% if movie.id == showtime.movie.id %}selected{% endif %}>{{ movie.title }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <label for="theatre">Theatre:</label>
+                <select id="theatre" name="theatre" required>
+                    {% for theatre in theatres %}
+                        <option value="{{ theatre.id }}" {% if theatre.id == showtime.theatre.id %}selected{% endif %}>{{ theatre.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <label for="showtime">Showtime:</label>
+                <input type="time" id="showtime" name="showtime" value="{{ showtime.showtime|date:'H:i' }}" required>
+                <span id="showtime-error" class="error-message"></span>
+            </div>
+
+            <div>
+                <label for="start_date">Start Date:</label>
+                <input type="date" id="start_date" name="start_date" value="{{ showtime.start_date|date:'Y-m-d' }}" required>
+                <span id="start_date-error" class="error-message"></span>
+            </div>
+
+            <div>
+                <label for="end_date">End Date:</label>
+                <input type="date" id="end_date" name="end_date" value="{{ showtime.end_date|date:'Y-m-d' }}" required>
+                <span id="end_date-error" class="error-message"></span>
+            </div>
+
+            <button type="submit">Save Changes</button>
+        </form>
+    </div>
+
+    <script>
+        function validateForm() {
+            const showtimeInput = document.getElementById('showtime');
+            const startDateInput = document.getElementById('start_date');
+            const endDateInput = document.getElementById('end_date');
+            const showtime = showtimeInput.value;
+            const startDate = new Date(startDateInput.value);
+            const endDate = new Date(endDateInput.value);
+            let valid = true;
+
+            // Check if the showtime is in the correct format (HH:MM)
+            const showtimePattern = /^([01]\d|2[0-3]):([0-5]\d)$/;
+            if (!showtimePattern.test(showtime)) {
+                document.getElementById('showtime-error').textContent = "Showtime must be in HH:MM format.";
+                valid = false;
+            } else {
+                document.getElementById('showtime-error').textContent = "";
+            }
+
+            // Check if the start date and end date are valid dates
+            if (isNaN(startDate.getTime())) {
+                document.getElementById('start_date-error').textContent = "Please enter a valid start date.";
+                valid = false;
+            } else {
+                document.getElementById('start_date-error').textContent = "";
+            }
+
+            if (isNaN(endDate.getTime())) {
+                document.getElementById('end_date-error').textContent = "Please enter a valid end date.";
+                valid = false;
+            } else if (endDate < startDate) {
+                document.getElementById('end_date-error').textContent = "End date must be after the start date.";
+                valid = false;
+            } else {
+                document.getElementById('end_date-error').textContent = "";
+            }
+
+            return valid;
+        }
+    </script>
+</body>
+</html>

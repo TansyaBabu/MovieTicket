@@ -1,0 +1,156 @@
+<!-- templates/user_profile.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif; /* Use a standard font */
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4; /* Light background color */
+        }
+        header {
+            background-color: #4a148c; /* Dark purple background */
+            color: white; /* White text color */
+            padding: 20px; /* Padding for header */
+            text-align: center; /* Center text */
+        }
+        nav ul {
+            list-style-type: none; /* Remove bullet points */
+            padding: 0; /* Remove padding */
+        }
+        nav ul li {
+            display: inline; /* Display items inline */
+            margin: 0 15px; /* Space between items */
+        }
+        nav ul li a {
+            color: white; /* White text color */
+            text-decoration: none; /* Remove underline */
+        }
+        .main-content {
+            max-width: 800px; /* Limit width of main content */
+            margin: 20px auto; /* Center content */
+            padding: 20px; /* Padding for content */
+            background: white; /* White background for content */
+            border-radius: 8px; /* Rounded corners */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        }
+        h2 {
+            color: #4a148c; /* Dark purple color for headings */
+        }
+        .card-grid {
+            display: flex; /* Use flexbox for layout */
+            flex-direction: column; /* Stack cards vertically */
+            gap: 20px; /* Space between cards */
+        }
+        .card {
+            background: #f9f9f9; /* Light gray background for cards */
+            border-radius: 8px; /* Rounded corners */
+            padding: 15px; /* Padding for card */
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        }
+        .voucher-section {
+            margin-top: 20px; /* Space above the voucher section */
+            padding: 15px;
+            background: #e9ecef; /* Light gray background for the voucher section */
+            border-radius: 8px; /* Rounded corners */
+        }
+        .voucher-section input {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: calc(100% - 22px); /* Full width minus padding */
+            margin-right: 10px; /* Space between input and button */
+        }
+        .voucher-section button {
+            padding: 10px 15px;
+            background-color: #28a745; /* Green for apply button */
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s; /* Smooth transition */
+        }
+        .voucher-section button:hover {
+            background-color: #218838; /* Darker green on hover */
+        }
+        #voucherMessage {
+            margin-top: 10px; /* Space above the message */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>User Profile</h1>
+        <nav>
+            <ul>
+                <li><a href="{% url 'user_dashboard' %}">Home</a></li>
+                <li><a href="#">Explore Movies</a></li>
+                <li><a href="#">Contact Us</a></li>
+                <li><a href="{% url 'logout' %}">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="main-content">
+        <h2>Welcome, {{ user.username }}!</h2>
+        <p>This is your user profile. Here you can view your details and update your information.</p>
+
+        <div class="card-grid">
+            <div class="card">
+                <h3>Profile Details</h3>
+                <div class="card-body">
+                    <p><strong>Name:</strong> {{ user.username }}</p>
+                    <p><strong>Email:</strong> {{ user.email }}</p>
+                    <p><strong>Phone:</strong> {{ user.phone }}</p>
+                    <p><strong>Address:</strong> {{ user.address }}</p>
+                    <a href="{% url 'update_profile' %}" class="btn-update">Update Profile</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gift Voucher Section -->
+        <div class="voucher-section">
+            <h2>Gift Voucher</h2>
+            <p>Enter your gift voucher code below:</p>
+            <input type="text" placeholder="Enter voucher code" id="voucherCode">
+            <button type="button" onclick="applyVoucher()">Apply Voucher</button>
+            <div id="voucherMessage"></div> <!-- For displaying messages -->
+        </div>
+    </div>
+
+    <script>
+        function applyVoucher() {
+            const voucherCode = document.getElementById('voucherCode').value;
+            const messageDiv = document.getElementById('voucherMessage');
+
+            if (voucherCode) {
+                fetch('/validate-voucher/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'  // Include CSRF token for security
+                    },
+                    body: JSON.stringify({ 'voucher_code': voucherCode })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        messageDiv.innerHTML = `<span style="color: green;">Voucher code "${voucherCode}" applied! Discount: ${data.discount_value}</span>`;
+                    } else {
+                        messageDiv.innerHTML = `<span style="color: red;">${data.message}</span>`;
+                    }
+                })
+                .catch(error => {
+                    messageDiv.innerHTML = `<span style="color: red;">An error occurred. Please try again.</span>`;
+                });
+            } else {
+                messageDiv.innerHTML = `<span style="color: red;">Please enter a valid voucher code.</span>`;
+            }
+        }
+    </script>
+</body>
+</html>

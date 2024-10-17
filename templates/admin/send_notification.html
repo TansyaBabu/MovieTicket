@@ -1,0 +1,112 @@
+<!-- templates/admin/send_notification.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send Notification</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif; /* Use a standard font */
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4; /* Light background color */
+        }
+        header {
+            background-color: #4a148c; /* Dark purple background */
+            color: white; /* White text color */
+            padding: 20px; /* Padding for header */
+            text-align: center; /* Center text */
+        }
+        nav ul {
+            list-style-type: none; /* Remove bullet points */
+            padding: 0; /* Remove padding */
+        }
+        nav ul li {
+            display: inline; /* Display items inline */
+            margin: 0 15px; /* Space between items */
+        }
+        nav ul li a {
+            color: white; /* White text color */
+            text-decoration: none; /* Remove underline */
+        }
+        .main-content {
+            max-width: 800px; /* Limit width of main content */
+            margin: 20px auto; /* Center content */
+            padding: 20px; /* Padding for content */
+            background: white; /* White background for content */
+            border-radius: 8px; /* Rounded corners */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        }
+        h1 {
+            color: #4a148c; /* Dark purple color for headings */
+        }
+        label {
+            font-weight: bold; /* Bold labels */
+        }
+        textarea {
+            width: 100%; /* Full width */
+            padding: 10px; /* Padding for textarea */
+            border: 1px solid #ccc; /* Border for textarea */
+            border-radius: 4px; /* Rounded corners */
+            margin-bottom: 10px; /* Space below textarea */
+        }
+        select {
+            width: 100%; /* Full width */
+            padding: 10px; /* Padding for select */
+            border: 1px solid #ccc; /* Border for select */
+            border-radius: 4px; /* Rounded corners */
+            margin-bottom: 10px; /* Space below select */
+        }
+        button {
+            padding: 10px 15px; /* Padding for button */
+            background-color: #28a745; /* Green background for button */
+            color: white; /* White text color */
+            border: none; /* No border */
+            border-radius: 4px; /* Rounded corners */
+            cursor: pointer; /* Pointer cursor */
+            transition: background-color 0.3s; /* Smooth transition */
+        }
+        button:hover {
+            background-color: #218838; /* Darker green on hover */
+        }
+        .back-link {
+            display: inline-block; /* Inline block for back link */
+            margin-top: 20px; /* Space above back link */
+            text-decoration: none; /* Remove underline */
+            color: #4a148c; /* Dark purple color */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Send System Notification</h1>
+        <nav>
+            <ul>
+                <li><a href="{% url 'admin_dashboard' %}">Dashboard</a></li>
+                <li><a href="{% url 'view_notifications' %}">View Notifications</a></li>
+                <li><a href="{% url 'send_notification' %}">Send Notification</a></li>
+                <li><a href="{% url 'logout' %}">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="main-content">
+        <form method="POST">
+            {% csrf_token %}
+            <label for="message">Notification Message:</label>
+            <textarea id="message" name="message" rows="4" required></textarea>
+
+            <label for="message_type">Select User Type:</label>
+            <select id="message_type" name="message_type" required>
+                <option value="all">All Users</option>
+                <option value="theatre_owner">Theatre Owners</option>
+                <option value="admin">Admins</option>
+            </select>
+
+            <button type="submit">Send Notification</button>
+        </form>
+        <a href="{% url 'admin_dashboard' %}" class="back-link">Back to Dashboard</a>
+    </div>
+</body>
+</html>

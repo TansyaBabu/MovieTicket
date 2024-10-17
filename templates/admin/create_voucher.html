@@ -1,0 +1,59 @@
+<!-- templates/create_voucher.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Voucher</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #4a148c;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Create Voucher Code</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <input type="text" name="code" placeholder="Voucher Code" required>
+            <input type="number" name="discount_value" placeholder="Discount Value" required>
+            <input type="date" name="expiration_date" required>
+            <button type="submit">Create Voucher</button>
+        </form>
+        <a href="{% url 'voucher_success' %}">Go to Voucher Success Page</a>
+    </div>
+</body>
+</html>

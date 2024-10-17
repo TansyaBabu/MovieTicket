@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Booking Confirmation</title>
+</head>
+<body>
+    <h1>Dear {{ request.user.first_name }},</h1>
+    <p>Your booking for the movie <strong>{{ movie }}</strong> has been confirmed.</p>
+    <p>Details:</p>
+    <ul>
+        <li><strong>Movie:</strong> {{ movie }}</li>
+        <li><strong>Theatre:</strong> {{ theatre }}</li>
+        <li><strong>Showtime:</strong> {{ showtime }}</li>
+        <li><strong>Selected Seats:</strong> {{ selected_seats }}</li>
+        <li><strong>Total Amount:</strong> ₹{{ total_amount }}</li>
+        <li><strong>Status:</strong> {{ status }}</li>
+        <li><strong>Payment:</strong> {{ payment }}</li>
+    </ul>
+    <p>Thank you for booking with us! Enjoy your movie!</p>
+</body>
+</html>

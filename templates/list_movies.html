@@ -1,0 +1,247 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movies - Admin Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f3f4f6;
+            color: #1f2937;
+            line-height: 1.6;
+        }
+        .container {
+            display: flex;
+        }
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background-color: #4a148c;
+            color: #e9d8fd;
+            padding: 20px;
+            position: fixed;
+        }
+        .sidebar h2 {
+            color: #d6bcfa;
+            margin-bottom: 30px;
+            font-size: 1.5em;
+            text-align: center;
+        }
+        .sidebar ul {
+            list-style: none;
+        }
+        .sidebar ul li {
+            margin-bottom: 15px;
+        }
+        .sidebar ul li a {
+            color: #e9d8fd;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .sidebar ul li a:hover, .sidebar ul li.active a {
+            background-color: #6b46c1;
+        }
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 20px;
+        }
+        .header {
+            background-color: #6b46c1;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .header h1 {
+            font-size: 2em;
+        }
+        .navbar {
+            background-color: #4a148c;
+            padding: 10px 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .navbar ul {
+            list-style-type: none;
+            display: flex;
+            justify-content: flex-end;
+        }
+        .navbar ul li {
+            margin-left: 20px;
+        }
+        .navbar ul li a {
+            color: #e9d8fd;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        .navbar ul li a:hover {
+            color: #fff;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #6b46c1;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        .btn:hover {
+            background-color: #4a148c;
+        }
+        .btn-add {
+            background-color: #28a745;
+        }
+        .btn-edit {
+            background-color: #ffc107;
+            color: #1f2937;
+        }
+        .btn-delete {
+            background-color: #dc3545;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        table th, table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        table th {
+            background-color: #6b46c1;
+            color: #fff;
+            font-weight: 600;
+        }
+        table tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+        table tr:hover {
+            background-color: #edf2f7;
+        }
+        img {
+            max-width: 110px;
+            height: auto;
+            border-radius: 5px;
+        }
+        .table-actions {
+            display: flex;
+            gap: 10px;
+        }
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: static;
+            }
+            .main-content {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <h2>Admin Panel</h2>
+            <ul>
+                <li><a href="{% url 'admin_dashboard' %}">Dashboard</a></li>
+                <li><a href="{% url 'view_customers' %}">Manage Users</a></li>
+                <li><a href="{% url 'list_categories' %}">Categories</a></li>
+                <li class="active"><a href="{% url 'list_movies' %}">Movies</a></li>
+                <li><a href="{% url 'admin_theatre_list' %}">Manage Theatres</a></li>
+                <li><a href="{% url 'sentiment_analysis' %}">Feedback Analysis</a></li>
+                <li><a href="{% url 'logout' %}">Logout</a></li>
+            </ul>
+        </div>
+        <div class="main-content">
+            <div class="navbar">
+                <ul>
+                    <li><a href="{% url 'admin_dashboard' %}">Home</a></li>
+                    <li><a href="#">Profile</a></li>
+                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                </ul>
+            </div>
+            <div class="header">
+                <h1>Movies</h1>
+            </div>
+            <a href="{% url 'add_movie' %}" class="btn btn-add">Add Movie</a>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Serial No.</th>
+                        <th>Title</th>
+                        <th>Category</th>
+                        <th>Release Date</th>
+                        <th>Description</th>
+                        <th>Poster</th>
+                        <th>Director</th>
+                        <th>Duration</th>
+                        <th>Price</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for movie in movies %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ movie.title }}</td>
+                        <td>{{ movie.category.name }}</td>
+                        <td>{{ movie.release_date }}</td>
+                        <td>{{ movie.description|truncatewords:20 }}</td>
+                        <td>
+                            {% if movie.poster %}
+                                <img src="{{ movie.poster.url }}" alt="{{ movie.title }}">
+                            {% else %}
+                                No poster available
+                            {% endif %}
+                        </td>
+                        <td>{{ movie.director }}</td>
+                        <td>{{ movie.duration }}</td>
+                        <td>{{ movie.price }}</td>
+                        <td class="table-actions">
+                            <a href="{% url 'edit_movie' movie.pk %}" class="btn btn-edit">Edit</a>
+                            <form action="{% url 'delete_movie' movie.pk %}" method="post" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-delete" onclick="return confirm('Are you sure you want to delete this movie?');">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="10">No movies found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
