@@ -1,4 +1,3 @@
-
 from pathlib import Path
 import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -14,7 +13,10 @@ SECRET_KEY = 'django-insecure-c36!qtg!)2mhuxsy2!inr3^fm)c2^r5f1yy@tw672sq835qh@#
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'movie-ticket-booking-system-production.up.railway.app',  # Add your Railway app URL here
+    'localhost','127.0.0.1'  # Allow requests from localhost
+]
 
 LOGIN_REDIRECT_URL = 'user_dashboard'  # Redirect to user dashboard after login
 LOGOUT_REDIRECT_URL = 'index'
