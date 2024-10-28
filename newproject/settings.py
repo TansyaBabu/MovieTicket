@@ -13,8 +13,7 @@ SECRET_KEY = 'django-insecure-c36!qtg!)2mhuxsy2!inr3^fm)c2^r5f1yy@tw672sq835qh@#
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 ALLOWED_HOSTS = [
-    'moviehub-m75a.onrender.com',
-    'moviehub-1-pmag.onrender.com',
+'movieticket-2di4.onrender.com',
     'localhost',
     '127.0.0.1'
 ]
