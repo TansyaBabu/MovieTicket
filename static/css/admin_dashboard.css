@@ -1,0 +1,328 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #ca2e2e;
+    background-color: #f4f4f4;
+}
+
+/* Header Styles */
+header {
+    background-color: salmon;
+    color: white;
+    padding: 20px;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000; /* Ensure header is above the sidebar */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2em;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 15px;
+}
+
+nav ul li {
+    display: inline;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+nav ul li a:hover {
+    text-decoration: underline;
+}
+
+/* Sidebar Styles */
+.sidebar {
+    height: calc(100vh - 60px); /* Adjust for header height */
+    width: 250px;
+    position: fixed;
+    top: 60px; /* Adjust for header height */
+    background-color: #da1e17;
+    padding: 20px;
+    color: white;
+    z-index: 100; /* Ensure sidebar is below the header */
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar ul li {
+    margin-bottom: 10px;
+}
+
+.sidebar ul li a {
+    color: #ffffff;
+    text-decoration: none;
+    display: block;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.sidebar ul li a:hover,
+.sidebar ul li.active a {
+    background-color: #da7134;
+}
+
+/* Main Content Styles */
+.main-content {
+    margin-left: 250px; /* Sidebar width */
+    padding: 50px;
+    padding-top: 80px; /* Adjust for header height */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center content horizontally */
+}
+
+
+/* Table Styles for View Customers */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    margin-top: 20px;
+}
+
+table th, table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+
+table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+table tr:hover {
+    background-color: #f5f5f5;
+}
+
+/* Grid Styles for Cards */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 cards per row */
+    gap: 20px; /* Space between cards */
+    max-width: 1200px; /* Limit maximum width of the grid */
+    width: 100%; /* Full width of its container */
+    justify-content: center; /* Center grid items */
+}
+
+.card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 20px;
+    width: 100%; /* Ensure cards take full width in their grid cell */
+    max-width: 300px; /* Limit maximum width of individual cards */
+}
+
+.card h3 {
+    margin-top: 0;
+    color: #007bff;
+}
+
+.card p {
+    margin: 10px 0;
+}
+
+.card .card-body {
+    font-size: 1em;
+    line-height: 1.6;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        top: 0; /* Adjust for fixed header */
+    }
+
+    .sidebar ul {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-around;
+    }
+
+    .sidebar ul li {
+        margin: 5px 0;
+    }
+
+    .main-content {
+        margin-left: 0;
+        padding: 10px;
+        padding-top: 60px; /* Adjust for header height */
+    }
+
+    .card-grid {
+        grid-template-columns: 1fr; /* 1 card per row for smaller screens */
+    }
+}
+/* Button Styles */
+.btn {
+    display: inline-block;
+    padding: 8px 12px;
+    margin: 0 4px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: bold;
+    text-align: center;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-edit {
+    background-color: #007bff;
+    color: white;
+    border: none;
+}
+
+.btn-edit:hover {
+    background-color: #0056b3;
+}
+
+.btn-delete {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+}
+
+.btn-delete:hover {
+    background-color: #c82333;
+}
+
+.btn-add {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    margin-bottom: 20px;
+}
+
+.btn-add:hover {
+    background-color: #218838;
+}
+/* Form Styles */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    box-sizing: border-box; /* Ensure padding is included in width */
+}
+
+.form-group textarea {
+    height: 100px; /* Set a fixed height for textarea */
+    resize: vertical; /* Allow vertical resizing only */
+}
+
+/* Button Styles */
+.btn-update {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.btn-update:hover {
+    background-color: #0056b3;
+}
+/* Button Styles */
+.btn-edit {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.btn-edit:hover {
+    background-color: #0056b3;
+}
+
+.btn-delete {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.btn-delete:hover {
+    background-color: #c82333;
+}
+/* Button Styles */
+.btn {
+    display: inline-block;
+    background-color: #007bff;
+    color: white;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    border-radius: 4px;
+    margin-right: 1rem;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+/* Specific Style for View Movies Button */
+.btn-view {
+    background-color: #28a745; /* Green color for the view button */
+}
+
+.btn-view:hover {
+    background-color: #218838; /* Darker green on hover */
+}
+
+
