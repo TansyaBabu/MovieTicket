@@ -13,7 +13,9 @@ SECRET_KEY = 'django-insecure-c36!qtg!)2mhuxsy2!inr3^fm)c2^r5f1yy@tw672sq835qh@#
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 ALLOWED_HOSTS = [
-'movieticket-2di4.onrender.com',
+    'moviehub-m75a.onrender.com',
+    'moviehub-1-pmag.onrender.com',
+    'movieticket-2di4.onrender.com',
     'localhost',
     '127.0.0.1'
 ]
@@ -51,6 +53,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -63,6 +66,9 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',  # Ensure this is included
 )
 ROOT_URLCONF = 'newproject.urls'
+
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 TEMPLATES = [
     {
